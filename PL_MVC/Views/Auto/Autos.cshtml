@@ -1,0 +1,93 @@
+﻿@model ML.Version
+@{
+    ViewBag.Title = "Autos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Autos</h2>
+    <div class="col-4">
+
+        @Html.LabelFor(model => model.Modelo.Marca.IdMarca, new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.Modelo.Marca.IdMarca, new SelectList(Model.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
+    </div>
+    <div class="col-4">
+        @Html.LabelFor(model => model.Modelo.IdModelo, new { @class = "form-label" })
+
+        @if (Model.Modelo.Modelos != null)
+        {
+            @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(Model.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+        }
+        else
+        {
+            @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+        }
+    </div>
+    <div class="col-4">
+        @Html.LabelFor(model => model.IdVersion, new { @class = "form-label" })
+
+        @if (Model.Versiones != null)
+        {
+            @Html.DropDownListFor(model => model.IdVersion, new SelectList(Model.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+        }
+        else
+        {
+            @Html.DropDownListFor(model => model.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+        }
+    </div>
+</div>
+
+<script>
+
+    function ModeloGetyIdMarca() {
+        var idMarcaVista = $("#ddlMarca").val();
+        $.ajax({
+            url: '@Url.Action("ModelosGetByIdMarca","Auto")', //haciendo peticion
+            type: 'GET',
+            dataType: 'JSON',
+            data: { IdMarca: idMarcaVista },
+            success: function (result) {
+                //console.log(result.Objects);
+                if (result.Correct) {
+                    var modelos = result.Objects;
+                    var options = '<option value="">Selecciona un Modelo</option>';
+                    $.each(modelos, function (index, modelo) {
+                        options += '<option value="' + modelo.IdModelo + '">' + modelo.Nombre + '</option >'
+                    })
+                    $("#ddlModelo").empty().append(options);
+                }
+                else
+                {
+                    alert("Error")
+                }
+            }
+        })
+    }
+
+    function VersionGetByIdModelo() {
+    var idModeloVista = $("#ddlModelo").val();
+    $.ajax({
+        url: '@Url.Action("VersionesGetByIdModelo", "Auto")',
+        type: 'GET',
+        dataType: 'JSON',
+        data: { IdModelo: idModeloVista },
+        success: function (result) {
+            //console.log(result.Objects);
+            if (result.Correct) {
+                var versiones = result.Objects;
+                var options = '<option value="">Selecciona un Modelo</option>';
+                $.each(versiones, function (index, version) {
+                    options += '<option value="' + version.IdVersion + '">' + version.Nombre + '</option >'
+                })
+                $("#ddlVersion").empty().append(options);
+            }
+            else
+            {
+                alert("Error")
+            }
+        }
+    })
+}
+
+</script>
+
