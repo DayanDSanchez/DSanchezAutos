@@ -26,14 +26,8 @@
     <div class="col-4">
         @Html.LabelFor(model => model.IdVersion, new { @class = "form-label" })
 
-        @if (Model.Versiones != null)
-        {
-            @Html.DropDownListFor(model => model.IdVersion, new SelectList(Model.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-        }
-        else
-        {
+        
             @Html.DropDownListFor(model => model.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-        }
     </div>
 </div>
 
@@ -42,9 +36,9 @@
     function ModeloGetyIdMarca() {
         var idMarcaVista = $("#ddlMarca").val();
         $.ajax({
-            url: '@Url.Action("ModelosGetByIdMarca","Auto")', //haciendo peticion
-            type: 'GET',
-            dataType: 'JSON',
+            url: '  ', //haciendo peticion
+            type: 'GET', //tipo de peticion 
+            dataType: 'text', //XML, HTML, Text
             data: { IdMarca: idMarcaVista },
             success: function (result) {
                 //console.log(result.Objects);
@@ -60,6 +54,9 @@
                 {
                     alert("Error")
                 }
+            },
+            error: {
+                //
             }
         })
     }
