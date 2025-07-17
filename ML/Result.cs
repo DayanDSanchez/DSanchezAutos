@@ -8,10 +8,10 @@ namespace ML
 {
     public class Result
     {
-        public bool Correct { get; set; }
-        public string ErrorMessage { get; set; }
-        public Exception exception { get; set; }
-        public object Object { get; set; }
-        public List<object> Objects { get; set; }
+        public bool Correct { get; set; }  //True o False
+        public string ErrorMessage { get; set; } //Cual es el error CLIENTE/USUARIO
+        public Exception exception { get; set; } //Error para el programador PROGRAMADOR
+        public object Object { get; set; }  //GetById  -  1 GUARDAR UN REGISTRO
+        public List<object> Objects { get; set; }  //GetAll GUARDA VARIOS REGISTROS
     }
 }

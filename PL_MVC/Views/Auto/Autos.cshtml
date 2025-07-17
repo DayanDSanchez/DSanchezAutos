@@ -6,38 +6,86 @@
 
 <div class="container">
     <h2>Autos</h2>
-    <div class="col-4">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-4">
 
-        @Html.LabelFor(model => model.Modelo.Marca.IdMarca, new { @class = "form-label" })
-        @Html.DropDownListFor(model => model.Modelo.Marca.IdMarca, new SelectList(Model.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
-    </div>
-    <div class="col-4">
-        @Html.LabelFor(model => model.Modelo.IdModelo, new { @class = "form-label" })
+                @Html.LabelFor(model => model.Modelo.Marca.IdMarca, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Modelo.Marca.IdMarca, new SelectList(Model.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
+            </div>
+            <div class="col-4">
+                @Html.LabelFor(model => model.Modelo.IdModelo, new { @class = "form-label" })
 
-        @if (Model.Modelo.Modelos != null)
-        {
-            @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(Model.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
-        }
-        else
-        {
-            @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
-        }
-    </div>
-    <div class="col-4">
-        @Html.LabelFor(model => model.IdVersion, new { @class = "form-label" })
+                @if (Model.Modelo.Modelos != null)
+                {
+                    @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(Model.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                }
+            </div>
+            <div class="col-4">
+                @Html.LabelFor(model => model.IdVersion, new { @class = "form-label" })
 
-        @if (Model.Versiones != null)
-        {
-            @Html.DropDownListFor(model => model.IdVersion, new SelectList(Model.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-        }
-        else
-        {
-            @Html.DropDownListFor(model => model.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-        }
+                @if (Model.Versiones != null)
+                {
+                    @Html.DropDownListFor(model => model.IdVersion, new SelectList(Model.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                @{
+                    List<object> imagenes = new List<object>();
+
+                    if (Session["Imagenes"] != null)
+                    {
+
+                        imagenes = (List<object>)Session["Imagenes"];
+                    } 
+                }
+                @foreach (byte[] imagen in imagenes)
+                {
+                    <img src="data:imagen/*;base64,@Convert.ToBase64String(imagen)" width="50%"/>
+                }
+            </div>
+            <div class="col-6">
+                @using (Html.BeginForm("CargarImagen", "Auto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <input type="file" name="ImagenAuto" onchange="previsualizarImagen(this)" />
+                    <img id="previsualizacion" />
+
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+
+    function previsualizarImagen(input) {
+
+        var img = input.files[0];
+
+        var reader = new FileReader()
+        reader.onload = function () {
+
+            var output = $('#previsualizacion')[0]
+            //console.log(output)
+
+            //var outputJS = document.getElementById('imgInput')
+            //console.log(outputJS)
+            output.src = reader.result
+        }
+        reader.readAsDataURL(img)
+    }
 
     function ModeloGetyIdMarca() {
         var idMarcaVista = $("#ddlMarca").val();
