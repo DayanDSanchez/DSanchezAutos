@@ -90,9 +90,9 @@
     function ModeloGetyIdMarca() {
         var idMarcaVista = $("#ddlMarca").val();
         $.ajax({
-            url: '@Url.Action("ModelosGetByIdMarca","Auto")', //haciendo peticion
-            type: 'GET',
-            dataType: 'JSON',
+            url: '  ', //haciendo peticion
+            type: 'GET', //tipo de peticion 
+            dataType: 'text', //XML, HTML, Text
             data: { IdMarca: idMarcaVista },
             success: function (result) {
                 //console.log(result.Objects);
@@ -108,6 +108,9 @@
                 {
                     alert("Error")
                 }
+            },
+            error: {
+                //
             }
         })
     }

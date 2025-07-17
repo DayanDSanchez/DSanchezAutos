@@ -1,9 +1,50 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
+<div class="container">
 
-    <p>Use this area to provide additional information.</p>
-</main>
+    <div id="inicio">
+        <h1 id="titulo">Holaa</h1>
+        <button onclick="CambiarTitulo()">Da clic</button>
+    </div>
+
+    <div class="mt-3">
+        <input id="color" type="color" />
+        <button onclick="CambioColorJQ()">CLIC color</button>
+    </div>
+
+    <div class="mt-3">
+        <h1>Prueba AJAX</h1>
+        <button id="btnCargar" onclick="Mensaje()">Cargar Mensaje</button>
+
+        <p id="resultado" class="mt-2"></p>
+    </div>
+
+</div>
+
+<script>
+    function CambioColorJQ() {
+        var color = $("#color").val()
+        $('#inicio').css('background', color)
+    }
+
+    function CambiarTitulo() {
+        document.getElementById("titulo").textContent = "Cambio usando DOM"
+    }
+
+
+    function Mensaje() {
+        $.ajax({
+            url: '/Content/txt/mensaje.txt',
+            type: 'GET',
+            dataType: 'text',
+            success: function (data) {
+                $("#resultado").text(data);
+            },
+            error: function () {
+                $("#resultado").text("Ocurrió un error al cargar el mensaje.");
+            }
+        });
+    }
+
+</script>
