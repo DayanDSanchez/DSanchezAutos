@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auto.cs" />
+    <Compile Include="AutoImagen.cs" />
     <Compile Include="Marca.cs" />
     <Compile Include="Modelo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

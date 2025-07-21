@@ -11,24 +11,31 @@ namespace PL_MVC.Controllers
     public class AutoController : Controller
     {
         // GET: Auto
+        public ActionResult GetAll()
+        {
+            return View();
+        }
+
         public ActionResult Autos()
         {
-            ML.Version version = new ML.Version();
-            version.Modelo = new ML.Modelo(); //abre la puerta
-            version.Modelo.Marca = new ML.Marca(); //abre otra puerta
+            ML.Auto auto = new ML.Auto();
+            auto.Version = new ML.Version();
+            auto.Version.Modelo = new ML.Modelo();
+            auto.Version.Modelo.Marca = new ML.Marca();
+
             //ML.Marca marca = new ML.Marca();
 
             ML.Result result = BL.Marca.GetAllSP();
             if (result.Correct)
             {
-                version.Modelo.Marca.Marcas = result.Objects;
+                auto.Version.Modelo.Marca.Marcas = result.Objects;
             }
             else
             {
-                version.Modelo.Marca.Marcas = new List<object>();
+                auto.Version.Modelo.Marca.Marcas = new List<object>();
             }
 
-            return View(version);
+            return View(auto);
         }
 
         [HttpPost]
@@ -48,10 +55,7 @@ namespace PL_MVC.Controllers
                 imagenes.Add(imagen);
 
                 Session["Imagenes"] = imagenes;
-
             }
-
-
             return RedirectToAction("Autos");
         }
 
@@ -73,7 +77,6 @@ namespace PL_MVC.Controllers
             ML.Result result = BL.Modelo.ModeloGetByIdMarca(IdMarca);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
         public JsonResult VersionesGetByIdModelo(int IdModelo)
         {
             ML.Result result = BL.Version.VersionByIdModelo(IdModelo);

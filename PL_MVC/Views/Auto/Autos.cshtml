@@ -1,4 +1,4 @@
-﻿@model ML.Version
+﻿@model ML.Auto
 @{
     ViewBag.Title = "Autos";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,31 +10,31 @@
         <div class="row">
             <div class="col-4">
 
-                @Html.LabelFor(model => model.Modelo.Marca.IdMarca, new { @class = "form-label" })
-                @Html.DropDownListFor(model => model.Modelo.Marca.IdMarca, new SelectList(Model.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
+                @Html.LabelFor(model => model.Version.Modelo.Marca.IdMarca, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Version.Modelo.Marca.IdMarca, new SelectList(Model.Version.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
             </div>
             <div class="col-4">
-                @Html.LabelFor(model => model.Modelo.IdModelo, new { @class = "form-label" })
+                @Html.LabelFor(model => model.Version.Modelo.IdModelo, new { @class = "form-label" })
 
-                @if (Model.Modelo.Modelos != null)
+                @if (Model.Version.Modelo.Modelos != null)
                 {
-                    @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(Model.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                    @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(Model.Version.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                    @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
                 }
             </div>
             <div class="col-4">
-                @Html.LabelFor(model => model.IdVersion, new { @class = "form-label" })
+                @Html.LabelFor(model => model.Version.IdVersion, new { @class = "form-label" })
 
-                @if (Model.Versiones != null)
+                @if (Model.Version.Versiones != null)
                 {
-                    @Html.DropDownListFor(model => model.IdVersion, new SelectList(Model.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                    @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(Model.Version.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                    @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
                 }
             </div>
         </div>
@@ -48,20 +48,36 @@
                     {
 
                         imagenes = (List<object>)Session["Imagenes"];
-                    } 
+                    }
                 }
                 @foreach (byte[] imagen in imagenes)
                 {
-                    <img src="data:imagen/*;base64,@Convert.ToBase64String(imagen)" width="50%"/>
+                    <img src="data:imagen/*;base64,@Convert.ToBase64String(imagen)" width="50%" />
                 }
             </div>
             <div class="col-6">
                 @using (Html.BeginForm("CargarImagen", "Auto", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
-                    <input type="file" name="ImagenAuto" onchange="previsualizarImagen(this)" />
-                    <img id="previsualizacion" />
+                    <!-- Contenedor con Bootstrap -->
+                    <div class="container mt-4">
+                        <div class="row">
+                            <!-- Campo para subir imagen -->
 
-                    <button type="submit" class="btn btn-success">Enviar</button>
+                            <label for="ImagenAuto" class="form-label">Selecciona una imagen</label>
+                            <input type="file" class="form-control" id="ImagenAuto" name="ImagenAuto" onchange="previsualizarImagen(this)">
+
+                            <img id="previsualizacion" class="img-fluid border rounded mt-3 mb-3" alt="Vista previa" style="max-height: 300px;">
+
+                        </div>
+
+                        <!-- Botón de envío -->
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success">Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+
                 }
             </div>
         </div>
@@ -71,7 +87,6 @@
 <script>
 
     function previsualizarImagen(input) {
-
         var img = input.files[0];
 
         var reader = new FileReader()
@@ -90,9 +105,9 @@
     function ModeloGetyIdMarca() {
         var idMarcaVista = $("#ddlMarca").val();
         $.ajax({
-            url: '  ', //haciendo peticion
-            type: 'GET', //tipo de peticion 
-            dataType: 'text', //XML, HTML, Text
+            url: '@Url.Action("ModelosGetByIdMarca", "Auto")', //haciendo peticion
+            type: 'GET', //tipo de peticion
+            dataType: 'JSON', //XML, HTML, Text
             data: { IdMarca: idMarcaVista },
             success: function (result) {
                 //console.log(result.Objects);
