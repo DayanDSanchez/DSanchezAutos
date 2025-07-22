@@ -65,5 +65,53 @@ namespace BL
             }
             return result;
         }
+
+        public static ML.Result Add(ML.Auto auto)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnection()))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = context;
+                    cmd.CommandText = "AutoAdd";
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Color", auto.Color);
+                    cmd.Parameters.AddWithValue("@Asientos", auto.Asientos);
+                    cmd.Parameters.AddWithValue("@Puertas", auto.Puertas);
+                    cmd.Parameters.AddWithValue("@IdVersion", auto.Version.IdVersion);
+
+                    cmd.Parameters.Add("@IdAuto", SqlDbType.Int);
+                    cmd.Parameters["@IdAuto"].Direction = ParameterDirection.Output;
+
+                    context.Open();
+
+                    int i = cmd.ExecuteNonQuery();
+
+                    //byte, short, int, long
+
+                    int idAuto = Convert.ToInt32(cmd.Parameters["@IdAuto"].Value);
+
+                    result.Object = idAuto;
+
+                }
+
+            } catch(Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.exception = ex;
+            }
+
+            return result;
+        }
+
+        public static ML.Result AddImagen(int idAuto, byte[] imagen)
+        {
+
+        }
     }
 }

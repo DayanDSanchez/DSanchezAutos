@@ -39,6 +39,35 @@ namespace PL_MVC.Controllers
         }
 
         [HttpPost]
+        public ActionResult AddAuto(ML.Auto auto)
+        {
+            //BL
+            //ML.Result result = BL.Auto.Add(auto);
+
+            //if (result.Correct)
+            //{
+            //    int idAuto = (int)result.Object;
+            //    if (Session["imagenes"] != null)
+            //    {
+            //        List<object> imagenes = (List<object>)Session["imagenes"];
+
+            //        foreach (var item in imagenes)
+            //        {
+            //            BL.Auto.AddImagen(idAuto, item);
+
+            //        }
+            //    }
+
+
+            //}
+
+
+            //sacas sesion
+            //BL.Auto.AddImagen(idAuto, list imagenes)
+
+            return View();
+        }
+        [HttpPost]
         public ActionResult CargarImagen(HttpPostedFileBase ImagenAuto)
         {
             var imagen = ConvertToArrayByte(ImagenAuto);
@@ -49,7 +78,8 @@ namespace PL_MVC.Controllers
                 imagenes.Add(imagen);
 
                 Session["Imagenes"] = imagenes;
-            } else
+            }
+            else
             {
                 List<object> imagenes = (List<object>)Session["imagenes"];
                 imagenes.Add(imagen);
