@@ -7,36 +7,51 @@
 <div class="container">
     <h2>Autos</h2>
     <div class="col-12">
-        <div class="row">
-            <div class="col-4">
+        <div>
+            @using (Html.BeginForm("AddAuto", "Auto", FormMethod.Post, new {@class="row"}))
+            {
+                <div>
+                    @Html.LabelFor(model => model.Color)
+                    @Html.TextBoxFor(model => model.Color)
 
-                @Html.LabelFor(model => model.Version.Modelo.Marca.IdMarca, new { @class = "form-label" })
-                @Html.DropDownListFor(model => model.Version.Modelo.Marca.IdMarca, new SelectList(Model.Version.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
-            </div>
-            <div class="col-4">
-                @Html.LabelFor(model => model.Version.Modelo.IdModelo, new { @class = "form-label" })
+                    @Html.LabelFor(model => model.Puertas)
+                    @Html.TextBoxFor(model => model.Puertas)
 
-                @if (Model.Version.Modelo.Modelos != null)
-                {
-                    @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(Model.Version.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
-                }
-            </div>
-            <div class="col-4">
-                @Html.LabelFor(model => model.Version.IdVersion, new { @class = "form-label" })
+                    @Html.LabelFor(model => model.Asientos)
+                    @Html.TextBoxFor(model => model.Asientos)
+                </div>
+                <div class="col-4">
 
-                @if (Model.Version.Versiones != null)
-                {
-                    @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(Model.Version.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
-                }
-            </div>
+                    @Html.LabelFor(model => model.Version.Modelo.Marca.IdMarca, new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Version.Modelo.Marca.IdMarca, new SelectList(Model.Version.Modelo.Marca.Marcas, "IdMarca", "Nombre"), "Selecciona una marca", new { @class = "form-select form-select-lg mb-3", @id = "ddlMarca", @onchange = "ModeloGetyIdMarca()" })
+                </div>
+                <div class="col-4">
+                    @Html.LabelFor(model => model.Version.Modelo.IdModelo, new { @class = "form-label" })
+
+                    @if (Model.Version.Modelo.Modelos != null)
+                    {
+                        @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(Model.Version.Modelo.Modelos, "IdModelo", "Nombre"), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Version.Modelo.IdModelo, new SelectList(String.Empty), "Selecciona un Modelo", new { @class = "form-select form-select-lg mb-3", @id = "ddlModelo", @onchange = "VersionGetByIdModelo()" })
+                    }
+                </div>
+                <div class="col-4">
+                    @Html.LabelFor(model => model.Version.IdVersion, new { @class = "form-label" })
+
+                    @if (Model.Version.Versiones != null)
+                    {
+                        @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(Model.Version.Versiones, "IdVersion", "Nombre"), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(model => model.Version.IdVersion, new SelectList(String.Empty), "Selecciona una Version", new { @class = "form-select form-select-lg mb-3", @id = "ddlVersion" })
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-success">Agregar Auto</button>
+            }
         </div>
 
         <div class="row">
