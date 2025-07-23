@@ -13,7 +13,18 @@ namespace PL_MVC.Controllers
         // GET: Auto
         public ActionResult GetAll()
         {
-            return View();
+            ML.Auto auto = new ML.Auto();
+
+            ML.Result result = BL.Auto.GetAllSP();
+            if (result.Correct)
+            {
+                auto.Autos = result.Objects;
+            }
+            else
+            {
+                auto.Autos = new List<object>();
+            }
+            return View(auto);
         }
 
         public ActionResult Autos()
