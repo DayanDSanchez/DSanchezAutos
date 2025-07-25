@@ -27,7 +27,8 @@ namespace PL_MVC.Controllers
             return View(auto);
         }
 
-        public ActionResult Autos()
+        [HttpGet]
+        public ActionResult Form()
         {
             ML.Auto auto = new ML.Auto();
             auto.Version = new ML.Version();
@@ -91,10 +92,21 @@ namespace PL_MVC.Controllers
                     Session["Imagenes"] = imagenes;
                 }
 
-                return RedirectToAction("Autos");
+                //return RedirectToAction("Autos");
             }
 
-            return RedirectToAction("Autos");
+
+            ML.Result resultMarca = BL.Marca.GetAllSP();
+            if (resultMarca.Correct)
+            {
+                auto.Version.Modelo.Marca.Marcas = resultMarca.Objects;
+            }
+            else
+            {
+                auto.Version.Modelo.Marca.Marcas = new List<object>();
+            }
+
+            return View(auto);
         }
 
 
