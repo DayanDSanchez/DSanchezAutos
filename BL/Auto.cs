@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ML;
 
 namespace BL
 {
@@ -39,13 +40,17 @@ namespace BL
                         {
                             ML.Auto auto = new ML.Auto();
                             auto.Version = new ML.Version();
+                            auto.Version.Modelo = new ML.Modelo();
+                            auto.Version.Modelo.Marca = new ML.Marca();
 
                             auto.IdAuto = Convert.ToInt16(row[0]);
                             auto.Color = Convert.ToString(row[1]);
                             auto.Asientos = Convert.ToInt16(row[2]);
                             auto.Puertas = Convert.ToInt16(row[3]);
                             auto.Version.IdVersion = Convert.ToInt16(row[4]);
-
+                            auto.Version.Nombre = Convert.ToString(row[5]);
+                            auto.Version.Modelo.Nombre = Convert.ToString(row[6]);
+                            auto.Version.Modelo.Marca.Nombre = Convert.ToString(row[7]);
                             //agregamos materia a la lista
                             result.Objects.Add(auto); //Boxing
                         }
@@ -96,10 +101,12 @@ namespace BL
                     int idAuto = Convert.ToInt32(cmd.Parameters["@IdAuto"].Value);
 
                     result.Object = idAuto;
+                    result.Correct = true;
 
                 }
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
@@ -111,7 +118,42 @@ namespace BL
 
         public static ML.Result AddImagen(int idAuto, byte[] imagen)
         {
+            ML.Result result = new ML.Result();
 
+            try
+            {
+                using (SqlConnection context = new SqlConnection(DL.Conexion.GetConnection()))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = context;
+                    cmd.CommandText = "ImagenAdd";
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@IdAuto", idAuto);
+                    cmd.Parameters.AddWithValue("@ImagenAuto", imagen);
+
+                    context.Open();
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    if (rowsAffected > 0)
+                    {
+                        result.Correct = true;
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                result.exception = ex;
+            }
+
+            return result;
         }
     }
 }

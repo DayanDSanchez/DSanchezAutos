@@ -50,34 +50,79 @@ namespace PL_MVC.Controllers
         }
 
         [HttpPost]
+        public ActionResult Form(ML.Auto auto, HttpPostedFileBase ImagenAuto, string accion)
+        {
+            if (accion == "insert")
+            {
+                ML.Result result = BL.Auto.Add(auto);
+
+                if (result.Correct)
+                {
+                    int idAuto = (int)result.Object;
+                    if (Session["Imagenes"] != null)
+                    {
+                        List<object> imagenes = (List<object>)Session["Imagenes"];
+
+                        foreach (var item in imagenes)
+                        {
+                            byte[] imagen = item as byte[];
+                            BL.Auto.AddImagen(idAuto, imagen);
+                        }
+
+                        Session["Imagenes"] = null;
+                    }
+                }
+                return RedirectToAction("GetAll");
+            }
+            if (accion == "addimagen")
+            {
+                var imagen = ConvertToArrayByte(ImagenAuto);
+
+                if (Session["Imagenes"] == null)
+                {
+                    List<object> imagenes = new List<object>();
+                    imagenes.Add(imagen);
+                    Session["Imagenes"] = imagenes;
+                }
+                else
+                {
+                    List<object> imagenes = (List<object>)Session["Imagenes"];
+                    imagenes.Add(imagen);
+                    Session["Imagenes"] = imagenes;
+                }
+
+                return RedirectToAction("Autos");
+            }
+
+            return RedirectToAction("Autos");
+        }
+
+
+        [HttpPost]
         public ActionResult AddAuto(ML.Auto auto)
         {
             //BL
-            //ML.Result result = BL.Auto.Add(auto);
+            ML.Result result = BL.Auto.Add(auto);
 
-            //if (result.Correct)
-            //{
-            //    int idAuto = (int)result.Object;
-            //    if (Session["imagenes"] != null)
-            //    {
-            //        List<object> imagenes = (List<object>)Session["imagenes"];
+            if (result.Correct)
+            {
+                int idAuto = (int)result.Object;
+                if (Session["imagenes"] != null)
+                {
+                    List<object> imagenes = (List<object>)Session["imagenes"];
 
-            //        foreach (var item in imagenes)
-            //        {
-            //            BL.Auto.AddImagen(idAuto, item);
+                    foreach (var item in imagenes)
+                    {
+                        byte[] imagen = item as byte[];
 
-            //        }
-            //    }
-
-
-            //}
-
-
-            //sacas sesion
-            //BL.Auto.AddImagen(idAuto, list imagenes)
-
-            return View();
+                        BL.Auto.AddImagen(idAuto, imagen);
+                    }
+                }
+            }
+            return RedirectToAction("GetAll");
         }
+
+
         [HttpPost]
         public ActionResult CargarImagen(HttpPostedFileBase ImagenAuto)
         {

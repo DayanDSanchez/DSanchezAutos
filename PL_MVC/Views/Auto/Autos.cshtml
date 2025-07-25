@@ -8,7 +8,7 @@
     <h2>Autos</h2>
     <div class="col-12">
         <div>
-            @using (Html.BeginForm("AddAuto", "Auto", FormMethod.Post, new {@class="row"}))
+            @using (Html.BeginForm("Form", "Auto", FormMethod.Post, new {@class="row"}))
             {
                 <div>
                     @Html.LabelFor(model => model.Color)
@@ -50,7 +50,7 @@
                     }
                 </div>
 
-                <button type="submit" class="btn btn-success">Agregar Auto</button>
+                <button type="submit" name="accion" value="insert" class="btn btn-success">Agregar Auto</button>
             }
         </div>
 
@@ -71,7 +71,7 @@
                 }
             </div>
             <div class="col-6">
-                @using (Html.BeginForm("CargarImagen", "Auto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("Form", "Auto", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     <!-- Contenedor con Bootstrap -->
                     <div class="container mt-4">
@@ -88,7 +88,7 @@
                         <!-- Botón de envío -->
                         <div class="row">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-success">Enviar</button>
+                                <button type="submit" name="accion" value="addimagen" class="btn btn-success">Enviar</button>
                             </div>
                         </div>
                     </div>

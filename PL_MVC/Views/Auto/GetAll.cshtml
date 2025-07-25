@@ -5,7 +5,7 @@
 }
 
 <h2>GetAll</h2>
-@Html.ActionLink("+ Agregar", "", "", new { @class = "btn btn-success" })
+@Html.ActionLink("+ Agregar", "Autos", "Auto", new { @class = "btn btn-success" })
 
 @if (Model.Autos != null)
 {
@@ -16,6 +16,9 @@
             <th>Color</th>
             <th>Asientos</th>
             <th>Puertas</th>
+            <th>Version</th>
+            <th>Modelo</th>
+            <th>Marca</th>
             <th>Eliminar</th>
         </tr>
         @foreach (ML.Auto auto in Model.Autos)
@@ -26,6 +29,9 @@
                 <td>@auto.Color</td>
                 <td>@auto.Asientos</td>
                 <td>@auto.Puertas</td>
+                <td>@auto.Version.Nombre</td>
+                <td>@auto.Version.Modelo.Nombre</td>
+                <td>@auto.Version.Modelo.Marca.Nombre</td>
                 <td><a href="@Url.Action("","" )" onclick="return confirm('Estas seguro que quieres eliminar esta materia?')" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
             </tr>
         }
